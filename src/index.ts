@@ -12,10 +12,12 @@ const run = async () => {
     try {
         const file = core.getInput('file')
         const keys: string[] = JSON.parse(core.getInput('key-path'))
+        const includeType = new yaml.Type('!include', { kind: 'mapping' })
+        const schema = yaml.Schema.create([includeType])
 
         const content = await fs.readFile(file, 'utf8')
 
-        let yamlData = yaml.load(content)
+        let yamlData = yaml.load(content, { schema: schema })
 
         if (yamlData == null || yamlData == undefined) {
             core.setFailed('Error in reading the yaml file')
