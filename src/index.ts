@@ -12,12 +12,12 @@ const run = async () => {
     try {
         const file = core.getInput('file')
         const keys: string[] = JSON.parse(core.getInput('key-path'))
-        const includeType = new yaml.Type('!include', { kind: 'mapping' })
-        const schema = yaml.Schema.create([includeType])
+        var includeType = new yaml.Type('!include', { kind: 'mapping' })
+        var ESPHOME_SCHEMA = yaml.DEFAULT_SCHEMA.extend([includeType])
 
         const content = await fs.readFile(file, 'utf8')
 
-        let yamlData = yaml.load(content, { schema: schema })
+        let yamlData = yaml.load(content, { schema: ESPHOME_SCHEMA })
 
         if (yamlData == null || yamlData == undefined) {
             core.setFailed('Error in reading the yaml file')
